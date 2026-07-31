@@ -46,7 +46,7 @@ const CONFIG = {
   // relay for static sites). Get your key at https://web3forms.com —
   // enter your email, no account/password needed, a key arrives by email
   // instantly. Paste it below and both forms start working.
-  WEB3FORMS_ACCESS_KEY: 'REPLACE_WITH_YOUR_WEB3FORMS_ACCESS_KEY',
+  WEB3FORMS_ACCESS_KEY: 'b5ba71b4-5c39-405f-9c67-1383a073f01f',
 
   // SHOWCASE ITEMS — PLACEHOLDER: replace with real performances/art/achievements.
   SHOWCASE_ITEMS: [

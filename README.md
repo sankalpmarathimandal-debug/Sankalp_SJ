@@ -101,4 +101,3 @@ Double-click **Start Local Preview.command** — it opens the site in your brows
 - Showcase page content (`SHOWCASE_ITEMS` in `assets/js/main.js`)
 - Shala admission form link (currently a mailto) in `shala.html`
 - Real schedule in `data/shala-calendar.xlsx` (currently sample/demo dates)
-- Web3Forms access key — paste a real key into `CONFIG.WEB3FORMS_ACCESS_KEY` in `assets/js/main.js` so Join Us / Become a Sponsor submissions actually deliver (see "Setting up form delivery" above)
