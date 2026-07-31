@@ -9,7 +9,8 @@
      data/home-events.xlsx            → homepage event cards
      data/timeline.xlsx               → Event Timeline page
      data/testimonials.xlsx  → homepage Community Voices
-     data/highlights.xlsx        → homepage Impact slider
+     data/highlights.json    → homepage slider (AUTO — just
+                               add photos to assets/images/highlights/)
      data/partners.xlsx        → homepage partner logos
      data/team.xlsx             → Our Team page
      data/shala-team.xlsx        → Marathi Shala team section

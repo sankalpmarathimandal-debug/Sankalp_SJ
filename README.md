@@ -21,7 +21,7 @@ Sankalp_SJ/
 │   ├── home-events.xlsx    Homepage event cards
 │   ├── timeline.xlsx       Events page timeline
 │   ├── testimonials.xlsx   Homepage "Community Voices"
-│   ├── highlights.xlsx     Homepage "Impact Stories" slider
+│   ├── highlights.json     Homepage slider (auto-generated — don't edit)
 │   ├── partners.xlsx       Homepage partner logos
 │   ├── team.xlsx           Team page members
 │   ├── shala-team.xlsx     Shala page team
@@ -49,7 +49,7 @@ Sankalp_SJ/
 | Homepage event cards | `data/home-events.xlsx` |
 | Event timeline | `data/timeline.xlsx` |
 | Testimonials | `data/testimonials.xlsx` |
-| Highlight photos | `data/highlights.xlsx` + image in `assets/images/highlights/` |
+| Highlight photos | just add/remove photos in `assets/images/highlights/` and push — updates automatically |
 | Partner logos | `data/partners.xlsx` + logo in `assets/images/partners/` |
 | Team members | `data/team.xlsx` + photo in `assets/images/team/` |
 | Shala team / FAQs | `data/shala-team.xlsx` / `data/shala-faq.xlsx` |
