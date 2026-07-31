@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Timeline | संकल्प - आपलं मराठी मंडळ</title>
+<meta name="description" content="Complete timeline of Sankalp Marathi Mandal events — select a year to explore monthly celebrations and festivals in Massachusetts.">
+<link rel="canonical" href="https://www.sankalpmarathi.org/event-timeline">
+<meta property="og:title" content="Event Timeline | Sankalp Marathi Mandal">
+<meta property="og:description" content="Select a year to explore monthly events of Sankalp Marathi Mandal.">
+<meta property="og:type" content="website">
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="timeline-page">
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">संकल्प</a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="event-timeline.html">Event Timeline</a></li>
+      <li><a href="our-team.html">Our Team</a></li>
+      <li><a href="marathi-shala.html">Marathi Shala</a></li>
+      <li><a href="faqs.html">FAQs</a></li>
+      <li><a href="showcase.html">Showcase</a></li>
+      <li><a href="constitution.html">Constitution</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+<div class="timeline-page-wrap">
+  <div class="timeline-header-wrapper">
+    <dotlottie-wc src="https://lottie.host/b7226a48-da42-4d4a-9bf0-87f2c1da1e40/Tklcs7bULB.lottie" class="corner-lottie" autoplay loop></dotlottie-wc>
+    <header class="timeline-header">
+      <h1>Event Timeline</h1>
+      <p>Select a year to explore monthly events</p>
+    </header>
+  </div>
+
+  <div class="timeline-container">
+    <div class="year-selector" id="yearSelector" style="display:none;">
+      <label for="yearSelect">Choose Year:</label>
+      <select id="yearSelect"></select>
+    </div>
+    <div id="timeline-loading" class="timeline-loading">Loading events...</div>
+    <div id="timeline" class="timeline"></div>
+  </div>
+</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-tagline">एक संकल्प मराठी जपण्याचा</p>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="index.html">Home</a>
+      <a href="event-timeline.html">Event Timeline</a>
+      <a href="our-team.html">Our Team</a>
+      <a href="marathi-shala.html">Marathi Shala</a>
+      <a href="faqs.html">FAQs</a>
+      <a href="showcase.html">Showcase</a>
+      <a href="constitution.html">Constitution</a>
+    </nav>
+    <p class="footer-copyright">Copyright © <span id="currentYear"></span> Sankalp - All Rights Reserved.</p>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/sankalpmarathimandal" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-square-instagram" style="font-size:32px;color:#E36C18;"></i></a>
+      <a href="https://www.facebook.com/share/g/18UEkDGmBE/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-square-facebook" style="font-size:32px;color:#E36C18;"></i></a>
+      <a href="https://www.youtube.com/@sankalpmarathimandal4296" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-square-youtube" style="font-size:32px;color:#E36C18;"></i></a>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+<script>
+const TIMELINE_DATA = [{"Year": "2026", "Month": "January", "Date": "", "Name": "Makar Sankrant", "Summary": "दक्षिणेकडून उत्तरेकडे प्रवास सुरू होतो सूर्यदेवाचा. तिळगुळ घ्या गोड गोड बोला म्हणत एकत्र साजरा करुया सण मकरसंक्रांतीचा.", "Description": "मकर संक्रांत हा नव्या उर्जेचा, आशेचा आणि आनंदाचा सण आहे. सूर्य मकर राशीत प्रवेश करतो आणि उत्तरायणाची सुरुवात होते. या मंगल प्रसंगी आपण सर्वांनी एकत्र येऊन आपली परंपरा, संस्कृती आणि आपुलकी जपण्याचा संकल्प करूया. तिळगूळ, पतंगांची रंगीबेरंगी उधळण, गोड गाणी आणि आपुलकीच्या भेटीगाठींनी नटलेला मकर संक्रांत २०२६ कार्यक्रम सर्वांसाठी आनंददायी ठरणार आहे.", "Venue": "Freeman-Kennedy School, 70 Boardman St", "ImageURL": "assets/images/events/2026/makar-sankrant.jpg"}, {"Year": "2026", "Month": "March", "Date": "", "Name": "Women's Day", "Summary": "महिला दिनानिमित्त आयोजित “स्त्री शक्तीचा उत्सव” अनुभवण्यासाठी, मनोरंजन व आनंदाने भरलेल्या या देखण्या कार्यक्रमात आपले मनःपूर्वक स्वागत आहे।", "Description": "", "Venue": "TBD", "ImageURL": "assets/images/events/2026/womens-day.jpg"}, {"Year": "2026", "Month": "March", "Date": "", "Name": "Gudi Padwa", "Summary": "नवचैतन्य, विजय आणि समृद्धीचे प्रतीक असलेला गुढीपाडवा आपल्यासाठी नव्या सुरुवातीचा संदेश घेऊन येतो—हा मंगलोत्सव उत्साह, आपुलकी आणि एकतेच्या भावनेतून साजरा करूया। 🌸", "Description": "", "Venue": "TBD", "ImageURL": "assets/images/events/2026/gudi-padwa.jpg"}, {"Year": "2026", "Month": "May", "Date": "", "Name": "Maharashtra Day", "Summary": "महाराष्ट्राची सांस्कृतिक संपन्नता आणि अभिमान साजरं करणारा महाराष्ट्र दिन, आपल्या इतिहासाची गाथा आणि परंपरा उजेडात आणणारा उत्सव—चला, आनंद-उत्साहाने हा मंगलसोहळा साजरा करूया! 🌟", "Description": "", "Venue": "TBD", "ImageURL": "assets/images/events/2026/maharashtra-day.jpg"}, {"Year": "2026", "Month": "July", "Date": "25", "Name": "Ashadhi Ekadashi", "Summary": "विठ्ठल नामाचा गजर – कडकडीत उपवास आणि भक्तीचा अथांग सागर, भजनांचे सूर – मनाला शांती देणारा पवित्र अनुभव, आणि पालखी सोहळा – संस्कृतीची पाळेमुळे घट्ट करणारी भक्तीमय वारी; Sankalp Marathi Mandal या पारंपारिक उत्सवाचा आनंद हर्षोल्हासाने साजरा करत आहे! 🌟", "Description": "", "Venue": "Shri Sai Krupa Temple, Walpole MA", "ImageURL": "assets/images/events/2026/ashadhi-ekadashi.jpg"}, {"Year": "2026", "Month": "August", "Date": "9", "Name": "Mandal Picnic", "Summary": "हसणं, गप्पा आणि गोड आठवणींचा संगम—Sankalp Marathi Mandal पिकनिकमध्ये धमाल, आनंद आणि निसर्गाच्या कुशीत अविस्मरणीय क्षण अनुभवूया! 🌿🎉", "Description": "", "Venue": "Picnic Area 5, Milton MA", "ImageURL": "assets/images/events/2026/mandal-picnic.jpg"}, {"Year": "2026", "Month": "October", "Date": "", "Name": "Dandiya Night", "Summary": "धुंद गरबा – पारंपारिक वेशभूषा आणि उर्जा भरलेले नृत्य, दांडियाची खणखण – टाळ्यांच्या गजरात हरवून जाणारा आनंद, आणि ढोल-ताशांचा ठेका – मनाला थिरकायला लावणारी ऊर्जा; Sankalp Marathi Mandal या सर्वात मोठ्या भव्य उत्सवाचा आनंद साजरा करत आहे!", "Description": "", "Venue": "TBD", "ImageURL": "assets/images/events/2026/dandiya-night.jpg"}, {"Year": "2026", "Month": "October", "Date": "", "Name": "Bhondla and Kanya Pujan", "Summary": "भोंडला – कडकडीत पारंपारिक खेळ आणि गोडगोष्टींचा आनंद, कन्या पूजन – पवित्रतेचे आणि सन्मानाचे प्रतीक; Sankalp Marathi Mandal या पारंपारिक उत्सवांचा आनंद हर्षोल्हासाने साजरा करत आहे! 🌸", "Description": "", "Venue": "TBD", "ImageURL": "assets/images/events/2026/bhondla.jpg"}, {"Year": "2026", "Month": "November", "Date": "", "Name": "Diwali", "Summary": "दिवाळी—अंधारावर प्रकाशाचा विजय, सुख-समृद्धी आणि नवचैतन्य घेऊन येणारा सण. घरोघरी रंगोळी, दिवे आणि गोड पदार्थांची उत्सवाची रंगत अनुभवताना, चला, आनंद आणि उत्साहाने हा मंगलसोहळा एकत्र साजरा करूया! 🪔✨", "Description": "", "Venue": "TBD", "ImageURL": "assets/images/events/2026/diwali.jpg"}];
+const MONTHS = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+const mNum = m => MONTHS[(m||'').slice(0,3).toLowerCase()]||0;
+function deriveType(e){const n=new Date();const k=(parseInt(e.Year)||n.getFullYear())*100+mNum(e.Month);const nk=n.getFullYear()*100+n.getMonth()+1;return k<nk?'previous':k===nk?'current':'future';}
+const byYear = {};
+TIMELINE_DATA.forEach(e => (byYear[e.Year]=byYear[e.Year]||[]).push(e));
+Object.values(byYear).forEach(l=>l.sort((a,b)=>mNum(a.Month)-mNum(b.Month)||((+a.Date||0)-(+b.Date||0))));
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('timeline-loading').style.display='none';
+  const sel = document.getElementById('yearSelect');
+  Object.keys(byYear).sort((a,b)=>b-a).forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;sel.appendChild(o);});
+  document.getElementById('yearSelector').style.display='block';
+  sel.onchange = render; render();
+  document.querySelector('.nav-toggle')?.addEventListener('click',()=>document.querySelector('.nav-links').classList.toggle('open'));
+  const y=document.getElementById('currentYear'); if(y) y.textContent=new Date().getFullYear();
+});
+function render(){
+  const year = document.getElementById('yearSelect').value;
+  const t = document.getElementById('timeline');
+  t.innerHTML='';
+  (byYear[year]||[]).forEach((e,i)=>{
+    const item=document.createElement('div');
+    item.className='timeline-item '+deriveType(e);
+    item.style.animationDelay=(i*0.1)+'s';
+    item.innerHTML=`<div class="timeline-marker"></div>
+      <div class="timeline-content">
+        <div class="month-label">${e.Month} ${e.Year}</div>
+        ${e.ImageURL?`<img class="timeline-event-image" src="${e.ImageURL}" alt="${e.Name}">`:''}
+        <div class="timeline-event-title">${e.Name}</div>
+        <div class="timeline-event-summary">${e.Summary||''}</div>
+      </div>`;
+    t.appendChild(item);
+  });
+}
+</script>
+</body>
+</html>
