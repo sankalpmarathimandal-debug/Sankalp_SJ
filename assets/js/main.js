@@ -67,6 +67,20 @@ function initNav() {
 }
 
 /* =====================================================
+   SCROLL REVEAL — gentle fade-up for sections
+   ===================================================== */
+function initReveal() {
+  if (!('IntersectionObserver' in window)) return;
+  const targets = document.querySelectorAll('.section-divider, .about-card, .info-card, .shala-highlight, .impact-slider-container, .partners-section, .doc-article');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('revealed'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.15 });
+  targets.forEach(t => { t.classList.add('reveal'); io.observe(t); });
+}
+
+/* =====================================================
    BACK TO TOP
    ===================================================== */
 function initBackToTop() {
@@ -527,6 +541,7 @@ function initFaqAccordion(scope) {
 document.addEventListener('DOMContentLoaded', function() {
   initNav();
   initBackToTop();
+  initReveal();
   fileProtocolNotice();
   loadEvents();
   loadTestimonials();
