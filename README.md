@@ -47,7 +47,7 @@ Reference documents converted from the original Google Sheets (not used by the s
 ## Hosting on GitHub Pages
 
 1. Push to GitHub → repo **Settings → Pages** → Deploy from branch `main`, folder `/ (root)`.
-2. Live at `https://sankalpmarathimandal-debug.github.io/SankalpMarathiMandalWebsite/`.
+2. Live at `https://sankalpmarathimandal-debug.github.io/Sankalp_SJ/`.
 3. Custom domain: add a `CNAME` file containing `www.sankalpmarathi.org`, set it in Pages settings, and point the domain's DNS CNAME record to `sankalpmarathimandal-debug.github.io`.
 
 ## Local preview
