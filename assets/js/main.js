@@ -20,6 +20,11 @@
 
    Images live in assets/images/. Add new images there
    and reference them by relative path in the workbooks.
+
+   join.html / sponsor.html use native <form> submissions sent
+   to Web3Forms (no Google Forms, no backend). Set
+   CONFIG.WEB3FORMS_ACCESS_KEY below with a free key from
+   https://web3forms.com for submissions to be delivered.
    ===================================================== */
 
 const CONFIG = {
@@ -36,9 +41,12 @@ const CONFIG = {
 
   SLIDER_INTERVAL: 4000,
 
-  // Google Forms
-  JOIN_FORM: 'https://docs.google.com/forms/d/e/1FAIpQLScRMbN063-W2u8Czz53sszMnt1qNFGqaozf-9tspHdo28S-VQ/viewform?usp=sharing',
-  SPONSOR_FORM: 'https://docs.google.com/forms/d/e/1FAIpQLSdZlvQ6H7zD9gD5h3I9Vmxi0uXRG7W8vBtijhQ_J2JXTS-p3w/viewform?usp=sharing',
+  // FORM DELIVERY — no Google Forms. Join Us (join.html) and Become a
+  // Sponsor (sponsor.html) submit via Web3Forms (a free, no-login email
+  // relay for static sites). Get your key at https://web3forms.com —
+  // enter your email, no account/password needed, a key arrives by email
+  // instantly. Paste it below and both forms start working.
+  WEB3FORMS_ACCESS_KEY: 'REPLACE_WITH_YOUR_WEB3FORMS_ACCESS_KEY',
 
   // SHOWCASE ITEMS — PLACEHOLDER: replace with real performances/art/achievements.
   SHOWCASE_ITEMS: [
@@ -666,6 +674,72 @@ function calendarAgendaItem(e, showDate) {
 }
 
 /* =====================================================
+   WEB3FORMS SUBMISSION (join.html + sponsor.html)
+   No Google Forms — forms POST via fetch() to Web3Forms,
+   a free no-login email relay. Set CONFIG.WEB3FORMS_ACCESS_KEY
+   (get one free at https://web3forms.com) for delivery to work.
+   ===================================================== */
+function initWeb3Form(formId) {
+  const form = document.getElementById(formId);
+  if (!form) return;
+
+  const keyInput = form.querySelector('input[name="access_key"]');
+  const statusEl = form.querySelector('.form-status');
+  const submitBtn = form.querySelector('.form-submit-btn');
+  const card = form.closest('.form-card');
+  const successEl = card ? card.querySelector('.form-success') : null;
+
+  const key = CONFIG.WEB3FORMS_ACCESS_KEY;
+  if (keyInput) keyInput.value = key || '';
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (!key || key === 'REPLACE_WITH_YOUR_WEB3FORMS_ACCESS_KEY') {
+      if (statusEl) {
+        statusEl.textContent = 'Form isn\'t fully set up yet — a Web3Forms access key is needed. Please contact us directly in the meantime.';
+        statusEl.className = 'form-status form-status-error';
+      }
+      return;
+    }
+
+    const originalBtnText = submitBtn ? submitBtn.textContent : '';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
+    if (statusEl) { statusEl.textContent = ''; statusEl.className = 'form-status'; }
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(form)))
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          if (card && successEl) {
+            form.style.display = 'none';
+            successEl.style.display = 'block';
+          } else if (statusEl) {
+            statusEl.textContent = 'Thank you — your submission was received.';
+            statusEl.className = 'form-status form-status-success';
+            form.reset();
+          }
+        } else {
+          throw new Error(data.message || 'Submission failed');
+        }
+      })
+      .catch(() => {
+        if (statusEl) {
+          statusEl.textContent = 'Something went wrong sending your message. Please try again in a moment.';
+          statusEl.className = 'form-status form-status-error';
+        }
+      })
+      .finally(() => {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+      });
+  });
+}
+
+/* =====================================================
    FAQ ACCORDION (faqs.html + marathi-shala.html)
    ===================================================== */
 function renderFaqs(csv, containerId, groupByCategory) {
@@ -734,6 +808,8 @@ document.addEventListener('DOMContentLoaded', function() {
   renderFaqs(CONFIG.SHALA_FAQS_CSV, 'shala-faq-container', true);
   renderShowcase();
   loadShalaCalendar();
+  initWeb3Form('joinForm');
+  initWeb3Form('sponsorForm');
 
   const modal = document.getElementById('modal');
   modal?.addEventListener('click', function(e) { if (e.target === this) closeModal(); });

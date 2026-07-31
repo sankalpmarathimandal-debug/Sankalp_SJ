@@ -14,6 +14,8 @@ Sankalp_SJ/
 ├── team.html           Our Team
 ├── shala.html          Marathi Shala
 ├── calendar.html       Shala Calendar (monthly, placeholder data)
+├── join.html           Join Us form (Web3Forms — no Google Forms)
+├── sponsor.html        Become a Sponsor form (Web3Forms — no Google Forms)
 ├── faq.html            FAQs
 ├── showcase.html       Showcase (placeholder — needs content)
 ├── constitution.html   Constitution (embedded PDF)
@@ -58,7 +60,7 @@ Sankalp_SJ/
 | Shala calendar | `data/shala-calendar.xlsx` — one row per date (see below) |
 | General FAQs | `data/faq.xlsx` |
 | Constitution | replace `docs/constitution.pdf` |
-| Join / Sponsor form links | `CONFIG` block at the top of `assets/js/main.js` |
+| Join Us / Become a Sponsor forms | `join.html` / `sponsor.html` — see "Setting up form delivery" below |
 | Announcement banner | marquee text in `index.html` |
 
 Keep the header row of each workbook intact, and keep images web-friendly (≤1200px, JPG preferred).
@@ -73,6 +75,16 @@ Keep the header row of each workbook intact, and keep images web-friendly (≤12
 - For a weekly recurring class, add one row per week (e.g. every Monday) — there's no recurrence feature yet.
 
 The calendar currently ships with **sample dates** so the page isn't empty — replace them with the real schedule whenever it's ready. The page opens on the current month if it has entries, otherwise the nearest month that does.
+
+### Setting up form delivery (Join Us / Become a Sponsor)
+
+No Google Forms — `join.html` and `sponsor.html` are real HTML forms that submit via [Web3Forms](https://web3forms.com), a free email-relay service with no account or password required:
+
+1. Go to https://web3forms.com and enter the email that should receive submissions (`sandeepj0208@gmail.com` or whichever inbox is best) — a free access key is emailed instantly. No sign-up, no password.
+2. Open `assets/js/main.js` and paste the key into `CONFIG.WEB3FORMS_ACCESS_KEY` near the top of the file, replacing `'REPLACE_WITH_YOUR_WEB3FORMS_ACCESS_KEY'`.
+3. Commit and push. Both forms start delivering to your inbox immediately — no other code changes needed.
+
+Until a real key is set, submitting either form shows a friendly "not set up yet" message instead of failing silently.
 
 ## Previewing changes
 
@@ -89,3 +101,4 @@ Double-click **Start Local Preview.command** — it opens the site in your brows
 - Showcase page content (`SHOWCASE_ITEMS` in `assets/js/main.js`)
 - Shala admission form link (currently a mailto) in `shala.html`
 - Real schedule in `data/shala-calendar.xlsx` (currently sample/demo dates)
+- Web3Forms access key — paste a real key into `CONFIG.WEB3FORMS_ACCESS_KEY` in `assets/js/main.js` so Join Us / Become a Sponsor submissions actually deliver (see "Setting up form delivery" above)
