@@ -6,32 +6,30 @@
    To update content, edit the .xlsx files in /data —
    the site reads them directly in the browser (SheetJS):
 
-     data/EventBanner.xlsx            → homepage event cards
-     data/Timeline.xlsx               → Event Timeline page
-     data/CommunityTestimonials.xlsx  → homepage Community Voices
-     data/HighlightPhotos.xlsx        → homepage Impact slider
-     data/SankalpPartners.xlsx        → homepage partner logos
-     data/SankalpOrg.xlsx             → Our Team page
-     data/SankalpShalaOrg.xlsx        → Marathi Shala team section
-     data/FAQComplete.xlsx            → FAQs page
-     data/ShalaFAQ.xlsx               → Marathi Shala FAQs
-     data/EventBannerShala.xlsx       → Marathi Shala events
+     data/home-events.xlsx            → homepage event cards
+     data/timeline.xlsx               → Event Timeline page
+     data/testimonials.xlsx  → homepage Community Voices
+     data/highlights.xlsx        → homepage Impact slider
+     data/partners.xlsx        → homepage partner logos
+     data/team.xlsx             → Our Team page
+     data/shala-team.xlsx        → Marathi Shala team section
+     data/faq.xlsx            → FAQs page
+     data/shala-faq.xlsx               → Marathi Shala FAQs
 
    Images live in assets/images/. Add new images there
    and reference them by relative path in the workbooks.
    ===================================================== */
 
 const CONFIG = {
-  EVENTS_CSV: 'data/EventBanner.xlsx',
-  TIMELINE_CSV: 'data/Timeline.xlsx',
-  TESTIMONIALS_CSV: 'data/CommunityTestimonials.xlsx',
-  HIGHLIGHTS_CSV: 'data/HighlightPhotos.xlsx',
-  PARTNERS_CSV: 'data/SankalpPartners.xlsx',
-  TEAM_CSV: 'data/SankalpOrg.xlsx',
-  SHALA_TEAM_CSV: 'data/SankalpShalaOrg.xlsx',
-  FAQS_CSV: 'data/FAQComplete.xlsx',
-  SHALA_FAQS_CSV: 'data/ShalaFAQ.xlsx',
-  SHALA_EVENTS_CSV: 'data/EventBannerShala.xlsx',
+  EVENTS_CSV: 'data/home-events.xlsx',
+  TIMELINE_CSV: 'data/timeline.xlsx',
+  TESTIMONIALS_CSV: 'data/testimonials.xlsx',
+  HIGHLIGHTS_CSV: 'data/highlights.xlsx',
+  PARTNERS_CSV: 'data/partners.xlsx',
+  TEAM_CSV: 'data/team.xlsx',
+  SHALA_TEAM_CSV: 'data/shala-team.xlsx',
+  FAQS_CSV: 'data/faq.xlsx',
+  SHALA_FAQS_CSV: 'data/shala-faq.xlsx',
 
   SLIDER_INTERVAL: 4000,
 
