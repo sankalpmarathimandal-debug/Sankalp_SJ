@@ -16,6 +16,7 @@
      data/shala-team.xlsx        → Marathi Shala team section
      data/faq.xlsx            → FAQs page
      data/shala-faq.xlsx               → Marathi Shala FAQs
+     data/shala-calendar.xlsx → Shala Calendar page (Year, Month, Day, Title, Type, Time, Notes)
 
    Images live in assets/images/. Add new images there
    and reference them by relative path in the workbooks.
@@ -31,6 +32,7 @@ const CONFIG = {
   SHALA_TEAM_CSV: 'data/shala-team.xlsx',
   FAQS_CSV: 'data/faq.xlsx',
   SHALA_FAQS_CSV: 'data/shala-faq.xlsx',
+  SHALA_CALENDAR_CSV: 'data/shala-calendar.xlsx',
 
   SLIDER_INTERVAL: 4000,
 
@@ -486,6 +488,184 @@ function renderShowcase() {
 }
 
 /* =====================================================
+   SHALA CALENDAR (calendar.html)
+   ===================================================== */
+const CALENDAR_TYPE_COLORS = {
+  class: '#764ba2',
+  event: '#E36C18',
+  holiday: '#B5171D',
+  exam: '#10b981'
+};
+const CALENDAR_TYPE_LABELS = { class: 'Class', event: 'Event', holiday: 'Holiday', exam: 'Exam' };
+const CALENDAR_DEFAULT_COLOR = '#6b7280';
+const CALENDAR_MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+let calendarEntries = [];
+let calendarViewYear = null;
+let calendarViewMonth = null; // 0-indexed
+let calendarSelectedKey = null;
+
+function calendarColorFor(type) {
+  return CALENDAR_TYPE_COLORS[(type || '').toLowerCase()] || CALENDAR_DEFAULT_COLOR;
+}
+
+function loadShalaCalendar() {
+  if (!document.getElementById('calGrid')) return;
+  loadSheet(CONFIG.SHALA_CALENDAR_CSV, rows => {
+    calendarEntries = rows
+      .map(r => {
+        const year = parseInt(r.Year);
+        const month = monthNum(r.Month); // 1-12
+        const day = parseInt(r.Day);
+        return { year, month, day, title: r.Title, type: r.Type, time: r.Time, notes: r.Notes };
+      })
+      .filter(e => e.title && e.year && e.month && e.day);
+
+    buildCalendarLegend();
+
+    const now = new Date();
+    let vy = now.getFullYear(), vm = now.getMonth();
+    const hasEntries = (y, m) => calendarEntries.some(e => e.year === y && e.month === m + 1);
+    if (!hasEntries(vy, vm)) {
+      let found = false;
+      for (let i = 1; i <= 24 && !found; i++) {
+        let ty = vy, tm = vm + i;
+        ty += Math.floor(tm / 12); tm = ((tm % 12) + 12) % 12;
+        if (hasEntries(ty, tm)) { vy = ty; vm = tm; found = true; }
+      }
+      if (!found) {
+        for (let i = 1; i <= 24 && !found; i++) {
+          let ty = vy, tm = vm - i;
+          ty += Math.floor(tm / 12); tm = ((tm % 12) + 12) % 12;
+          if (hasEntries(ty, tm)) { vy = ty; vm = tm; found = true; }
+        }
+      }
+    }
+    calendarViewYear = vy; calendarViewMonth = vm;
+    renderCalendarMonth();
+  }, () => {
+    const grid = document.getElementById('calGrid');
+    if (grid) grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--apple-gray);">Calendar could not be loaded right now.</p>';
+  });
+
+  document.getElementById('calPrev')?.addEventListener('click', () => shiftCalendarMonth(-1));
+  document.getElementById('calNext')?.addEventListener('click', () => shiftCalendarMonth(1));
+}
+
+function shiftCalendarMonth(delta) {
+  calendarViewMonth += delta;
+  calendarViewYear += Math.floor(calendarViewMonth / 12);
+  calendarViewMonth = ((calendarViewMonth % 12) + 12) % 12;
+  calendarSelectedKey = null;
+  renderCalendarMonth();
+}
+
+function buildCalendarLegend() {
+  const legend = document.getElementById('calLegend');
+  if (!legend) return;
+  legend.innerHTML = Object.keys(CALENDAR_TYPE_LABELS).map(t => `
+    <div class="calendar-legend-item">
+      <span class="calendar-legend-dot" style="background:${CALENDAR_TYPE_COLORS[t]}"></span>
+      <span>${CALENDAR_TYPE_LABELS[t]}</span>
+    </div>`).join('');
+}
+
+function renderCalendarMonth() {
+  const label = document.getElementById('calMonthLabel');
+  const grid = document.getElementById('calGrid');
+  if (!label || !grid) return;
+  label.textContent = `${CALENDAR_MONTH_NAMES[calendarViewMonth]} ${calendarViewYear}`;
+
+  const monthEntries = calendarEntries.filter(e => e.year === calendarViewYear && e.month === calendarViewMonth + 1);
+  const firstWeekday = new Date(calendarViewYear, calendarViewMonth, 1).getDay();
+  const daysInMonth = new Date(calendarViewYear, calendarViewMonth + 1, 0).getDate();
+  const totalCells = Math.ceil((firstWeekday + daysInMonth) / 7) * 7;
+
+  const today = new Date();
+  const todayKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+
+  let html = '';
+  for (let i = 0; i < totalCells; i++) {
+    const dayNum = i - firstWeekday + 1;
+    let cellDate, inMonth;
+    if (dayNum < 1) {
+      cellDate = new Date(calendarViewYear, calendarViewMonth, dayNum);
+      inMonth = false;
+    } else if (dayNum > daysInMonth) {
+      cellDate = new Date(calendarViewYear, calendarViewMonth, dayNum);
+      inMonth = false;
+    } else {
+      cellDate = new Date(calendarViewYear, calendarViewMonth, dayNum);
+      inMonth = true;
+    }
+    const y = cellDate.getFullYear(), m = cellDate.getMonth() + 1, d = cellDate.getDate();
+    const key = `${y}-${m}-${d}`;
+    const dayEntries = inMonth ? monthEntries.filter(e => e.day === d) : [];
+    const classes = ['calendar-day'];
+    if (!inMonth) classes.push('other-month');
+    if (key === todayKey) classes.push('today');
+    if (dayEntries.length) classes.push('has-events');
+    if (key === calendarSelectedKey) classes.push('selected');
+
+    const shown = dayEntries.slice(0, 2);
+    const extra = dayEntries.length - shown.length;
+    const chips = shown.map(e => `<div class="calendar-chip" style="background:${calendarColorFor(e.type)}">${escapeHtml(e.title)}</div>`).join('')
+      + (extra > 0 ? `<div class="calendar-chip-more">+${extra} more</div>` : '');
+    const dots = dayEntries.slice(0, 4).map(e => `<span class="calendar-day-dot" style="background:${calendarColorFor(e.type)}"></span>`).join('');
+
+    html += `<div class="${classes.join(' ')}" data-key="${key}">
+      <div class="calendar-day-num">${d}</div>
+      <div class="calendar-day-chips">${chips}</div>
+      <div class="calendar-day-dots">${dots}</div>
+    </div>`;
+  }
+  grid.innerHTML = html;
+
+  grid.querySelectorAll('.calendar-day.has-events').forEach(cell => {
+    cell.addEventListener('click', () => {
+      calendarSelectedKey = calendarSelectedKey === cell.dataset.key ? null : cell.dataset.key;
+      renderCalendarMonth();
+    });
+  });
+
+  renderCalendarAgenda(monthEntries);
+}
+
+function renderCalendarAgenda(monthEntries) {
+  const title = document.getElementById('calAgendaTitle');
+  const list = document.getElementById('calAgendaList');
+  if (!title || !list) return;
+
+  if (calendarSelectedKey) {
+    const [y, m, d] = calendarSelectedKey.split('-').map(Number);
+    const entries = monthEntries.filter(e => e.day === d);
+    const dateLabel = new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+    title.textContent = dateLabel;
+    list.innerHTML = entries.length ? entries.map(calendarAgendaItem).join('') : '<p class="calendar-agenda-empty">Nothing scheduled.</p>';
+    return;
+  }
+
+  title.textContent = `${CALENDAR_MONTH_NAMES[calendarViewMonth]} at a glance`;
+  const sorted = [...monthEntries].sort((a, b) => a.day - b.day);
+  list.innerHTML = sorted.length
+    ? sorted.map(e => calendarAgendaItem(e, true)).join('')
+    : '<p class="calendar-agenda-empty">No classes or events scheduled this month yet.</p>';
+}
+
+function calendarAgendaItem(e, showDate) {
+  const dateStr = showDate ? `${CALENDAR_MONTH_NAMES[e.month - 1].slice(0, 3)} ${e.day}` : '';
+  const meta = [e.time, e.notes].filter(Boolean).join(' · ');
+  return `<div class="calendar-agenda-item">
+    <span class="calendar-agenda-dot" style="background:${calendarColorFor(e.type)}"></span>
+    <div>
+      ${dateStr ? `<div class="calendar-agenda-date">${escapeHtml(dateStr)}</div>` : ''}
+      <div class="calendar-agenda-name">${escapeHtml(e.title)}</div>
+      ${meta ? `<div class="calendar-agenda-meta">${escapeHtml(meta)}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+/* =====================================================
    FAQ ACCORDION (faqs.html + marathi-shala.html)
    ===================================================== */
 function renderFaqs(csv, containerId, groupByCategory) {
@@ -553,6 +733,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderFaqs(CONFIG.FAQS_CSV, 'faq-container', false);
   renderFaqs(CONFIG.SHALA_FAQS_CSV, 'shala-faq-container', true);
   renderShowcase();
+  loadShalaCalendar();
 
   const modal = document.getElementById('modal');
   modal?.addEventListener('click', function(e) { if (e.target === this) closeModal(); });

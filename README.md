@@ -13,6 +13,7 @@ Sankalp_SJ/
 ├── events.html         Event timeline (by year)
 ├── team.html           Our Team
 ├── shala.html          Marathi Shala
+├── calendar.html       Shala Calendar (monthly, placeholder data)
 ├── faq.html            FAQs
 ├── showcase.html       Showcase (placeholder — needs content)
 ├── constitution.html   Constitution (embedded PDF)
@@ -26,7 +27,8 @@ Sankalp_SJ/
 │   ├── team.xlsx           Team page members
 │   ├── shala-team.xlsx     Shala page team
 │   ├── faq.xlsx            FAQ page questions
-│   └── shala-faq.xlsx      Shala page FAQs
+│   ├── shala-faq.xlsx      Shala page FAQs
+│   └── shala-calendar.xlsx Shala Calendar page (Year, Month, Day, Title, Type, Time, Notes)
 │
 ├── assets/
 │   ├── css/style.css       All styling
@@ -53,12 +55,24 @@ Sankalp_SJ/
 | Partner logos | `data/partners.xlsx` + logo in `assets/images/partners/` |
 | Team members | `data/team.xlsx` + photo in `assets/images/team/` |
 | Shala team / FAQs | `data/shala-team.xlsx` / `data/shala-faq.xlsx` |
+| Shala calendar | `data/shala-calendar.xlsx` — one row per date (see below) |
 | General FAQs | `data/faq.xlsx` |
 | Constitution | replace `docs/constitution.pdf` |
 | Join / Sponsor form links | `CONFIG` block at the top of `assets/js/main.js` |
 | Announcement banner | marquee text in `index.html` |
 
 Keep the header row of each workbook intact, and keep images web-friendly (≤1200px, JPG preferred).
+
+### Updating the Shala Calendar
+
+`data/shala-calendar.xlsx` has one row per date: `Year, Month, Day, Title, Type, Time, Notes`.
+
+- **Month** is the full name (`September`), **Day** is the day of the month (`7`).
+- **Type** controls the color and must be one of: `Class`, `Event`, `Holiday`, `Exam`.
+- **Time** and **Notes** are optional.
+- For a weekly recurring class, add one row per week (e.g. every Monday) — there's no recurrence feature yet.
+
+The calendar currently ships with **sample dates** so the page isn't empty — replace them with the real schedule whenever it's ready. The page opens on the current month if it has entries, otherwise the nearest month that does.
 
 ## Previewing changes
 
@@ -74,3 +88,4 @@ Double-click **Start Local Preview.command** — it opens the site in your brows
 
 - Showcase page content (`SHOWCASE_ITEMS` in `assets/js/main.js`)
 - Shala admission form link (currently a mailto) in `shala.html`
+- Real schedule in `data/shala-calendar.xlsx` (currently sample/demo dates)
