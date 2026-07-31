@@ -1,0 +1,28 @@
+name: Cache-bust CSS/JS
+
+on:
+  push:
+    paths:
+      - "assets/css/style.css"
+      - "assets/js/main.js"
+      - "scripts/bump_cache_version.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Bump ?v= on style.css and main.js links
+        run: python3 scripts/bump_cache_version.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "*.html"
+          git diff --cached --quiet || (git commit -m "Auto-bump cache version after style/script change" && git push)
