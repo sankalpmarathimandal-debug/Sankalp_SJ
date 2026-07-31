@@ -18,6 +18,7 @@ Sankalp_SJ/
 ├── sponsor.html        Become a Sponsor form (Web3Forms — no Google Forms)
 ├── faq.html            FAQs
 ├── showcase.html       Showcase (placeholder — needs content)
+├── forms.html           Forms & Sign-ups (self-service — see below)
 ├── constitution.html   Constitution (embedded PDF)
 │
 ├── data/               ← ALL SITE CONTENT (edit these to update the site)
@@ -30,7 +31,8 @@ Sankalp_SJ/
 │   ├── shala-team.xlsx     Shala page team
 │   ├── faq.xlsx            FAQ page questions
 │   ├── shala-faq.xlsx      Shala page FAQs
-│   └── shala-calendar.xlsx Shala Calendar page (Year, Month, Day, Title, Type, Time, Notes)
+│   ├── shala-calendar.xlsx Shala Calendar page (Year, Month, Day, Title, Type, Time, Notes)
+│   └── forms.xlsx          Forms & Sign-ups page (Title, Description, Link, Active, Order)
 │
 ├── assets/
 │   ├── css/style.css       All styling
@@ -61,6 +63,7 @@ Sankalp_SJ/
 | General FAQs | `data/faq.xlsx` |
 | Constitution | replace `docs/constitution.pdf` |
 | Join Us / Become a Sponsor forms | `join.html` / `sponsor.html` — see "Setting up form delivery" below |
+| Forms & Sign-ups (event RSVPs, surveys, etc.) | `data/forms.xlsx` — no coding, see "Updating Forms & Sign-ups" below |
 | Announcement banner | marquee text in `index.html` |
 
 Keep the header row of each workbook intact, and keep images web-friendly (≤1200px, JPG preferred).
@@ -86,6 +89,21 @@ No Google Forms — `join.html` and `sponsor.html` are real HTML forms that subm
 
 Until a real key is set, submitting either form shows a friendly "not set up yet" message instead of failing silently.
 
+### Updating Forms & Sign-ups (no coding required)
+
+`forms.html` is a self-service page — anyone on the team can publish a new sign-up or survey without touching code, using `data/forms.xlsx`. Columns: `Title, Description, Link, Active, Order`.
+
+**To add a new form:**
+
+1. Create the form itself somewhere no-code — [Google Forms](https://forms.google.com) or [Tally](https://tally.so) both work well and are free. Build it there like any Google Form, then copy its shareable link.
+2. Open `data/forms.xlsx` in Excel (or Google Sheets), add a new row: a short `Title`, a one-line `Description`, paste the `Link`, set `Active` to `Yes`, and give it an `Order` number (lower numbers show first).
+3. Save the file, keeping the same filename (`forms.xlsx`).
+4. Get it back into the repo (pick whichever fits the team):
+   - **Easiest / recommended:** send the updated file (or just the new row's details) to whoever manages the GitHub repo — they drag the replacement file in and it's live in a minute.
+   - **Fully self-service:** if a team member is added as a GitHub collaborator, they can go to `data/forms.xlsx` on github.com, click **Add file → Upload files**, drag in the updated workbook (same filename), and click **Commit changes** — all in the browser, no terminal, no git commands.
+
+To take a form down, set its `Active` column to `No` instead of deleting the row (keeps the link on file for next time). If there are no active rows, the page just shows "No forms are open right now."
+
 ## Previewing changes
 
 Double-click **Start Local Preview.command** — it opens the site in your browser with data loading correctly. (Opening an .html file directly won't load data; browsers block that.)
@@ -101,3 +119,4 @@ Double-click **Start Local Preview.command** — it opens the site in your brows
 - Showcase page content (`SHOWCASE_ITEMS` in `assets/js/main.js`)
 - Shala admission form link (currently a mailto) in `shala.html`
 - Real schedule in `data/shala-calendar.xlsx` (currently sample/demo dates)
+- `data/forms.xlsx` ships with one inactive example row — replace or delete it once real forms are added

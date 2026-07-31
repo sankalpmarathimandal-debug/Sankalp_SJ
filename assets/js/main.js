@@ -17,6 +17,9 @@
      data/faq.xlsx            → FAQs page
      data/shala-faq.xlsx               → Marathi Shala FAQs
      data/shala-calendar.xlsx → Shala Calendar page (Year, Month, Day, Title, Type, Time, Notes)
+     data/forms.xlsx          → Forms & Sign-ups page (Title, Description, Link, Active, Order)
+                                 — add a row to publish any Google Forms / Tally
+                                 link on the site with zero coding. See README.
 
    Images live in assets/images/. Add new images there
    and reference them by relative path in the workbooks.
@@ -38,6 +41,7 @@ const CONFIG = {
   FAQS_CSV: 'data/faq.xlsx',
   SHALA_FAQS_CSV: 'data/shala-faq.xlsx',
   SHALA_CALENDAR_CSV: 'data/shala-calendar.xlsx',
+  FORMS_CSV: 'data/forms.xlsx',
 
   SLIDER_INTERVAL: 4000,
 
@@ -477,6 +481,38 @@ function renderTeamGrid(csv, containerId) {
 }
 
 /* =====================================================
+   FORMS & SIGN-UPS (forms.html)
+   Self-service list of external form links (Google Forms,
+   Tally, etc.) — no coding required to add/remove one, just
+   edit data/forms.xlsx. See README "Updating Forms & Sign-ups".
+   ===================================================== */
+function renderForms() {
+  const container = document.getElementById('forms-container');
+  if (!container) return;
+  loadSheet(CONFIG.FORMS_CSV, rows => {
+      const forms = rows
+        .filter(f => f.Title && f.Title.trim() && f.Link && f.Link.trim())
+        .filter(f => !f.Active || f.Active.toLowerCase() !== 'no')
+        .sort((a, b) => parseInt(a.Order || 0) - parseInt(b.Order || 0));
+
+      if (!forms.length) {
+        container.innerHTML = `<p style="text-align:center;color:var(--apple-gray);max-width:500px;margin:0 auto;">No forms are open right now — check back soon!</p>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="info-cards">
+        ${forms.map(f => `
+          <div class="info-card">
+            <div class="about-icon"><i class="fas fa-file-lines"></i></div>
+            <h4>${escapeHtml(f.Title)}</h4>
+            ${f.Description ? `<p>${escapeHtml(f.Description)}</p>` : ''}
+            <p style="margin-top:14px;"><a href="${f.Link}" target="_blank" rel="noopener" style="color:var(--brand-gradient-start);font-weight:600;text-decoration:none;">Open Form <i class="fas fa-arrow-up-right-from-square" style="font-size:12px;"></i></a></p>
+          </div>`).join('')}
+      </div>`;
+  });
+}
+
+/* =====================================================
    SHOWCASE (showcase.html)
    ===================================================== */
 function renderShowcase() {
@@ -808,6 +844,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderFaqs(CONFIG.SHALA_FAQS_CSV, 'shala-faq-container', true);
   renderShowcase();
   loadShalaCalendar();
+  renderForms();
   initWeb3Form('joinForm');
   initWeb3Form('sponsorForm');
 

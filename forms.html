@@ -3,19 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Event Timeline | संकल्प - आपलं मराठी मंडळ</title>
-<meta name="description" content="Complete timeline of Sankalp Marathi Mandal events — select a year to explore monthly celebrations and festivals in Massachusetts.">
-<link rel="canonical" href="https://www.sankalpmarathi.org/events">
-<meta property="og:title" content="Event Timeline | Sankalp Marathi Mandal">
-<meta property="og:description" content="Select a year to explore monthly events of Sankalp Marathi Mandal.">
+<title>Forms & Sign-ups | संकल्प - आपलं मराठी मंडळ</title>
+<meta name="description" content="Current sign-ups and forms for Sankalp Marathi Mandal events and activities.">
+<link rel="canonical" href="https://www.sankalpmarathi.org/forms">
+<meta property="og:title" content="Forms & Sign-ups | Sankalp Marathi Mandal">
+<meta property="og:description" content="Current sign-ups and forms for Sankalp Marathi Mandal events and activities.">
 <meta property="og:type" content="website">
-<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="assets/css/style.css?v=1f5bd25">
+<link rel="stylesheet" href="assets/css/style.css?v=aa8461e">
 </head>
 
-<body class="timeline-page">
+<body>
 <nav class="site-nav" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="index.html" class="nav-brand">संकल्प</a>
@@ -35,39 +34,14 @@
 </nav>
 
 <main>
-<div class="timeline-page-wrap">
-  <div class="timeline-header-wrapper">
-    <dotlottie-wc src="https://lottie.host/b7226a48-da42-4d4a-9bf0-87f2c1da1e40/Tklcs7bULB.lottie" class="corner-lottie" autoplay loop></dotlottie-wc>
-    <header class="timeline-header">
-      <h1>Event Timeline</h1>
-      <p>Select a year to explore monthly events</p>
-    </header>
-  </div>
+<section class="page-hero">
+  <h1>Forms & Sign-ups</h1>
+  <p>Open sign-ups, RSVPs, and surveys for संकल्प events and activities.</p>
+</section>
 
-  <div class="timeline-container">
-    <div class="year-selector" id="yearSelector" style="display:none;">
-      <label for="yearSelect">Choose Year:</label>
-      <select id="yearSelect"></select>
-    </div>
-    <div id="timeline-loading" class="timeline-loading">Loading events...</div>
-    <div id="timeline" class="timeline"></div>
-  </div>
-</div>
-
-<!-- Event Modal -->
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
-  <div class="modal-content" id="modal-content">
-    <button class="modal-close" onclick="closeModal()" aria-label="Close modal" id="modal-close-btn">×</button>
-    <div class="modal-layout" id="modal-layout">
-      <div class="modal-media" id="modal-media"></div>
-      <div class="modal-body">
-        <h2 class="modal-title" id="modal-title"></h2>
-        <p class="modal-desc" id="modal-desc"></p>
-        <div class="modal-meta" id="modal-meta"></div>
-      </div>
-    </div>
-  </div>
-</div>
+<section id="forms">
+  <div id="forms-container"></div>
+</section>
 </main>
 
 <footer>
@@ -94,6 +68,6 @@
 </footer>
 
 <button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
-<script src="assets/js/main.js?v=1f5bd25" defer></script>
+<script src="assets/js/main.js?v=aa8461e" defer></script>
 </body>
 </html>
