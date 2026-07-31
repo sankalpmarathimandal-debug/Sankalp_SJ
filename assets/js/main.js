@@ -24,7 +24,7 @@ const CONFIG = {
   EVENTS_CSV: 'data/home-events.xlsx',
   TIMELINE_CSV: 'data/timeline.xlsx',
   TESTIMONIALS_CSV: 'data/testimonials.xlsx',
-  HIGHLIGHTS_CSV: 'data/highlights.xlsx',
+  HIGHLIGHTS_JSON: 'data/highlights.json',
   PARTNERS_CSV: 'data/partners.xlsx',
   TEAM_CSV: 'data/team.xlsx',
   SHALA_TEAM_CSV: 'data/shala-team.xlsx',
@@ -362,12 +362,16 @@ let slides = [], currentSlideIndex = 0, slideInterval;
 
 function loadImpactSlider() {
   if (!document.getElementById('slider')) return;
-  loadSheet(CONFIG.HIGHLIGHTS_CSV, rows => {
-      slides = rows.filter(s => s.Photos).map(s => ({ photo: s.Photos.trim(), title: (s.Title || '').trim() }));
+  if (location.protocol === 'file:') return;
+  fetch(CONFIG.HIGHLIGHTS_JSON)
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(items => {
+      slides = items.filter(s => s.photo);
       buildSlider();
       showSlide(0);
       startAutoSlide();
-  });
+    })
+    .catch(err => console.error('Failed to load highlights', err));
 }
 
 function buildSlider() {

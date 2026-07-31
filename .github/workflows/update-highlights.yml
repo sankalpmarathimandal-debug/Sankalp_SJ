@@ -1,0 +1,27 @@
+name: Update highlights
+
+on:
+  push:
+    paths:
+      - "assets/images/highlights/**"
+      - "scripts/generate_highlights.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Generate highlights manifest
+        run: python3 scripts/generate_highlights.py
+      - name: Commit manifest if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/highlights.json
+          git diff --cached --quiet || (git commit -m "Auto-update highlights from folder" && git push)
