@@ -17,7 +17,7 @@ Sankalp_SJ/
 ├── join.html           Join Us form (Web3Forms — no Google Forms)
 ├── sponsor.html        Become a Sponsor form (Web3Forms — no Google Forms)
 ├── faq.html            FAQs
-├── showcase.html       Showcase — videos & photos (Excel-driven, see below)
+├── showcase.html       Showcase — videos, photos & documents, event-grouped (see below)
 ├── forms.html           Forms & Sign-ups (self-service — see below)
 ├── constitution.html   Constitution (embedded PDF)
 │
@@ -33,14 +33,16 @@ Sankalp_SJ/
 │   ├── shala-faq.xlsx      Shala page FAQs
 │   ├── shala-calendar.xlsx Shala Calendar page (Year, Month, Day, Title, Type, Time, Notes)
 │   ├── forms.xlsx          Forms & Sign-ups page (Title, Description, Link, Active, Order)
-│   └── showcase.xlsx       Showcase page (Title, Description, Category, YouTubeURL, ImageURL, Active, Order)
+│   └── showcase.xlsx       Showcase page (Event, Title, Description, Category, YouTubeURL, ImageURL, DocumentURL, Active, Order)
 │
 ├── assets/
 │   ├── css/style.css       All styling
 │   ├── js/main.js          All logic (reads the workbooks)
 │   └── images/             Site images (branding, events, team, highlights, showcase…)
 │
-├── docs/constitution.pdf   The constitution document
+├── docs/
+│   ├── constitution.pdf        The constitution document
+│   └── showcase/               Showcase PDFs (Aarti sheets, event docs — see below)
 │
 ├── source/                 Reference only — NOT used by the site
 │   ├── google-links.md         Links to the original Google Sheets & Forms
@@ -65,7 +67,7 @@ Sankalp_SJ/
 | Constitution | replace `docs/constitution.pdf` |
 | Join Us / Become a Sponsor forms | `join.html` / `sponsor.html` — see "Setting up form delivery" below |
 | Forms & Sign-ups (event RSVPs, surveys, etc.) | `data/forms.xlsx` — no coding, see "Updating Forms & Sign-ups" below |
-| Showcase videos & photos | `data/showcase.xlsx` — no coding, see "Updating the Showcase" below |
+| Showcase videos, photos & documents | `data/showcase.xlsx` — no coding, see "Updating the Showcase" below |
 | Announcement banner | marquee text in `index.html` |
 
 Keep the header row of each workbook intact, and keep images web-friendly (≤1200px, JPG preferred).
@@ -106,30 +108,31 @@ Until a real key is set, submitting either form shows a friendly "not set up yet
 
 To take a form down, set its `Active` column to `No` instead of deleting the row (keeps the link on file for next time). If there are no active rows, the page just shows "No forms are open right now."
 
-### Updating the Showcase (videos & photos, no coding required)
+### Updating the Showcase (videos, photos & documents, no coding required)
 
-`showcase.html` displays a grid of videos and photos — performances, student achievements, a community member's painting, anything — driven entirely by `data/showcase.xlsx`. Columns: `Title, Description, Category, YouTubeURL, ImageURL, Active, Order`.
+`showcase.html` displays videos, photos, and documents — performances, student achievements, a community member's painting, an event's Aarti sheet, anything — driven entirely by `data/showcase.xlsx`. Columns: `Event, Title, Description, Category, YouTubeURL, ImageURL, DocumentURL, Active, Order`.
 
-Each row is **either** a video **or** a photo — fill in one of `YouTubeURL` / `ImageURL` and leave the other blank.
+Each row is **exactly one** of a video, a photo, or a document — fill in only one of `YouTubeURL` / `ImageURL` / `DocumentURL` and leave the other two blank.
 
-**To add a video:**
+**To add a video:** paste any YouTube link into `YouTubeURL` (a normal `youtube.com/watch?v=...` link, a `youtu.be/...` short link, or a Shorts link all work). The site pulls the thumbnail from YouTube automatically — nothing to upload. Clicking it plays the video in a pop-up on the page.
 
-1. Paste any YouTube link into `YouTubeURL` — a normal `youtube.com/watch?v=...` link, a `youtu.be/...` short link, or a Shorts link all work.
-2. Leave `ImageURL` blank. The site automatically pulls the thumbnail from YouTube — nothing to upload. Clicking it plays the video in a pop-up on the page.
+**To add a photo** (a painting, a student's achievement, an event photo, etc.): save it into `assets/images/showcase/` (≤1200px, JPG preferred), then put the path in `ImageURL`, e.g. `assets/images/showcase/priya-painting.jpg`. Clicking it opens the photo full-size in a pop-up.
 
-**To add a photo** (a painting, a student's achievement, an event photo, etc.):
+**To add a document** (an Aarti sheet, competition rules, an event program, etc.): save the PDF into `docs/showcase/`, then put the path in `DocumentURL`, e.g. `docs/showcase/ganpati-aarti-2026.pdf`. The card shows a document icon; clicking it opens the PDF in a new tab.
 
-1. Save the photo into `assets/images/showcase/` (resize to ≤1200px, JPG preferred) — either send it to the repo admin, or if you're a GitHub collaborator, drag it in yourself via **Add file → Upload files** on that folder on github.com.
-2. In `ImageURL`, put the path to that file, e.g. `assets/images/showcase/priya-painting.jpg`. Leave `YouTubeURL` blank.
-3. Clicking the photo opens it full-size in a pop-up on the page.
+For any of the three, get the file into the repo the same way as `forms.xlsx` — hand it to the repo admin, or upload directly via GitHub's website if you're a collaborator (**Add file → Upload files** on the relevant folder, same filename, **Commit changes**).
 
-**Both types share the same remaining columns:**
+**Grouping related items under one heading (e.g. a festival with multiple sessions):**
 
-- `Title` (required), and optionally `Description` and `Category` (e.g. "Dance", "Art", "Marathi Shala").
+Use the `Event` column to group rows together — every row with the same `Event` text is shown under one shared heading, in its own mini-grid. For example, during Ganpati you might have a video and a document (the Aarti sheet) that belong together, and a separate competition with its own photos — give the first group's rows `Event = Ganpati 2026 — Aarti & Documents` and the second group's rows `Event = Ganpati 2026 — Competition`; they'll render as two distinct sections. Leave `Event` blank for anything that should just show in the default section with no heading (this is how the existing videos/photos work today).
+
+**Columns shared by all rows, all groups:**
+
+- `Title` (required), and optionally `Description` and `Category` (e.g. "Dance", "Art", "Documents").
 - `Active` — set to `Yes` to publish, `No` to unpublish without losing the row.
-- `Order` — **lower numbers show first**, so this is how priority is controlled. Use gaps (10, 20, 30…) to make it easy to slot new items in between later.
+- `Order` — **lower numbers show first**, controlling both the order of items within a group and which group appears first (whichever group's lowest `Order` item is smallest shows first). Use gaps (10, 20, 30…) to make it easy to slot new items in between later.
 
-Once the workbook is updated, get it back into the repo the same way as `forms.xlsx` (hand it to the repo admin, or upload directly via GitHub's website if you're a collaborator — see "Updating Forms & Sign-ups" above for the exact steps). If there are no active rows, the page shows "Nothing to show yet."
+If there are no active rows, the page shows "Nothing to show yet."
 
 ## Previewing changes
 
@@ -146,4 +149,4 @@ Double-click **Start Local Preview.command** — it opens the site in your brows
 - Shala admission form link (currently a mailto) in `shala.html`
 - Real schedule in `data/shala-calendar.xlsx` (currently sample/demo dates)
 - `data/forms.xlsx` ships with one inactive example row — replace or delete once real forms are added
-- `data/showcase.xlsx` ships with one inactive example photo row (`ImageURL` points at a placeholder file that doesn't exist yet) — replace or delete once real photos are added
+- `data/showcase.xlsx` ships with two inactive example rows demonstrating Event grouping and a document card (`DocumentURL`/`ImageURL` point at placeholder files that don't exist yet) — replace or delete once real content is added

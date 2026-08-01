@@ -20,11 +20,15 @@
      data/forms.xlsx          → Forms & Sign-ups page (Title, Description, Link, Active, Order)
                                  — add a row to publish any Google Forms / Tally
                                  link on the site with zero coding. See README.
-     data/showcase.xlsx       → Showcase page (Title, Description, Category,
-                                 YouTubeURL, ImageURL, Active, Order) — fill in
-                                 YouTubeURL for a video card or ImageURL for a photo
-                                 card (photos live in assets/images/showcase/),
-                                 ordered by priority.
+     data/showcase.xlsx       → Showcase page (Event, Title, Description, Category,
+                                 YouTubeURL, ImageURL, DocumentURL, Active, Order) —
+                                 fill in exactly one of YouTubeURL / ImageURL /
+                                 DocumentURL per row (photos in assets/images/showcase/,
+                                 PDFs in docs/showcase/). Rows sharing the same Event
+                                 name are grouped under one heading (e.g. "Ganpati 2026
+                                 — Aarti & Documents" vs "Ganpati 2026 — Competition") —
+                                 leave Event blank for the default ungrouped section.
+                                 Ordered by priority within and across groups.
 
    Images live in assets/images/. Add new images there
    and reference them by relative path in the workbooks.
@@ -519,41 +523,64 @@ function extractYouTubeId(url) {
   return m ? m[1] : null;
 }
 
+function showcaseMediaHtml(v) {
+  const videoId = extractYouTubeId(v.YouTubeURL);
+  if (videoId) {
+    return `<div class="showcase-media showcase-clickable-media" tabindex="0" role="button" aria-label="Play video: ${escapeHtml(v.Title)}" onclick="openVideoModal('${videoId}')" onkeydown="if(event.key==='Enter')openVideoModal('${videoId}')">
+               <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="${escapeHtml(v.Title)}" loading="lazy">
+               <div class="showcase-hover-icon"><i class="fas fa-play"></i></div>
+             </div>`;
+  }
+  if (v.ImageURL && v.ImageURL.trim()) {
+    const safeTitle = escapeHtml(v.Title).replace(/'/g, "\\'");
+    return `<div class="showcase-media showcase-clickable-media" tabindex="0" role="button" aria-label="View image: ${escapeHtml(v.Title)}" onclick="openShowcaseImage('${v.ImageURL}', '${safeTitle}')" onkeydown="if(event.key==='Enter')openShowcaseImage('${v.ImageURL}', '${safeTitle}')">
+               <img src="${v.ImageURL}" alt="${escapeHtml(v.Title)}" loading="lazy">
+               <div class="showcase-hover-icon"><i class="fas fa-expand"></i></div>
+             </div>`;
+  }
+  // Document (PDF or other file) — opens in a new tab, no modal needed.
+  const isPdf = /\.pdf(\?|$)/i.test(v.DocumentURL || '');
+  return `<a class="showcase-media showcase-clickable-media" href="${v.DocumentURL}" target="_blank" rel="noopener" aria-label="Open document: ${escapeHtml(v.Title)}">
+             <i class="fas ${isPdf ? 'fa-file-pdf' : 'fa-file-lines'}" style="font-size:48px;color:var(--brand-gradient-start);"></i>
+             <div class="showcase-hover-icon"><i class="fas fa-arrow-up-right-from-square"></i></div>
+           </a>`;
+}
+
+function showcaseCardHtml(v) {
+  return `
+    <div class="showcase-card">
+      ${showcaseMediaHtml(v)}
+      <div class="showcase-body">
+        ${v.Category ? `<div class="showcase-meta">${escapeHtml(v.Category)}</div>` : ''}
+        <div class="showcase-title">${escapeHtml(v.Title)}</div>
+        ${v.Description ? `<p class="showcase-desc">${escapeHtml(v.Description)}</p>` : ''}
+      </div>
+    </div>`;
+}
+
 function renderShowcase() {
-  const grid = document.getElementById('showcase-grid');
-  if (!grid) return;
+  const container = document.getElementById('showcase-grid');
+  if (!container) return;
   loadSheet(CONFIG.SHOWCASE_CSV, rows => {
       const items = rows
-        .filter(v => v.Title && v.Title.trim() && (extractYouTubeId(v.YouTubeURL) || (v.ImageURL && v.ImageURL.trim())))
+        .filter(v => v.Title && v.Title.trim() && (extractYouTubeId(v.YouTubeURL) || (v.ImageURL && v.ImageURL.trim()) || (v.DocumentURL && v.DocumentURL.trim())))
         .filter(v => !v.Active || v.Active.toLowerCase() !== 'no')
         .sort((a, b) => parseInt(a.Order || 0) - parseInt(b.Order || 0));
 
       if (!items.length) {
-        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--apple-gray);">Nothing to show yet — check back soon!</p>`;
+        container.innerHTML = `<p style="text-align:center;color:var(--apple-gray);">Nothing to show yet — check back soon!</p>`;
         return;
       }
 
-      grid.innerHTML = items.map(v => {
-        const videoId = extractYouTubeId(v.YouTubeURL);
-        const media = videoId
-          ? `<div class="showcase-media showcase-clickable-media" tabindex="0" role="button" aria-label="Play video: ${escapeHtml(v.Title)}" onclick="openVideoModal('${videoId}')" onkeydown="if(event.key==='Enter')openVideoModal('${videoId}')">
-               <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="${escapeHtml(v.Title)}" loading="lazy">
-               <div class="showcase-hover-icon"><i class="fas fa-play"></i></div>
-             </div>`
-          : `<div class="showcase-media showcase-clickable-media" tabindex="0" role="button" aria-label="View image: ${escapeHtml(v.Title)}" onclick="openShowcaseImage('${v.ImageURL}', '${escapeHtml(v.Title).replace(/'/g, "\\'")}')" onkeydown="if(event.key==='Enter')openShowcaseImage('${v.ImageURL}', '${escapeHtml(v.Title).replace(/'/g, "\\'")}')">
-               <img src="${v.ImageURL}" alt="${escapeHtml(v.Title)}" loading="lazy">
-               <div class="showcase-hover-icon"><i class="fas fa-expand"></i></div>
-             </div>`;
-        return `
-        <div class="showcase-card">
-          ${media}
-          <div class="showcase-body">
-            ${v.Category ? `<div class="showcase-meta">${escapeHtml(v.Category)}</div>` : ''}
-            <div class="showcase-title">${escapeHtml(v.Title)}</div>
-            ${v.Description ? `<p class="showcase-desc">${escapeHtml(v.Description)}</p>` : ''}
-          </div>
-        </div>`;
-      }).join('');
+      // Group by Event (blank Event = ungrouped, no heading). Groups appear in
+      // the order their first (lowest-Order) item shows up, same pattern as
+      // the FAQ page's category grouping.
+      const groups = [...new Set(items.map(v => (v.Event || '').trim()))];
+      container.innerHTML = groups.map(g => `
+        ${g ? `<h2 class="timeline-year" style="text-align:center;margin:40px 0 20px;">${escapeHtml(g)}</h2>` : ''}
+        <div class="showcase-grid">
+          ${items.filter(v => (v.Event || '').trim() === g).map(showcaseCardHtml).join('')}
+        </div>`).join('');
   });
 }
 
