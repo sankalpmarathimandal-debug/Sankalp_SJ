@@ -1170,6 +1170,10 @@ main { flex: 1; }
   transition: all 0.3s ease;
 }
 
+@media (min-width: 880px) {
+  .info-cards--four { grid-template-columns: repeat(4, 1fr); max-width: 1200px; }
+}
+
 .info-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
 .info-card .about-icon { margin-bottom: 16px; }
 .info-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
