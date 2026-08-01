@@ -20,9 +20,11 @@
      data/forms.xlsx          → Forms & Sign-ups page (Title, Description, Link, Active, Order)
                                  — add a row to publish any Google Forms / Tally
                                  link on the site with zero coding. See README.
-     data/showcase.xlsx       → Showcase page videos (Title, Description, Category,
-                                 YouTubeURL, Active, Order) — add a row with any
-                                 YouTube link to publish it, ordered by priority.
+     data/showcase.xlsx       → Showcase page (Title, Description, Category,
+                                 YouTubeURL, ImageURL, Active, Order) — fill in
+                                 YouTubeURL for a video card or ImageURL for a photo
+                                 card (photos live in assets/images/showcase/),
+                                 ordered by priority.
 
    Images live in assets/images/. Add new images there
    and reference them by relative path in the workbooks.
@@ -521,24 +523,30 @@ function renderShowcase() {
   const grid = document.getElementById('showcase-grid');
   if (!grid) return;
   loadSheet(CONFIG.SHOWCASE_CSV, rows => {
-      const videos = rows
-        .filter(v => v.Title && v.Title.trim() && extractYouTubeId(v.YouTubeURL))
+      const items = rows
+        .filter(v => v.Title && v.Title.trim() && (extractYouTubeId(v.YouTubeURL) || (v.ImageURL && v.ImageURL.trim())))
         .filter(v => !v.Active || v.Active.toLowerCase() !== 'no')
         .sort((a, b) => parseInt(a.Order || 0) - parseInt(b.Order || 0));
 
-      if (!videos.length) {
-        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--apple-gray);">No videos to show yet — check back soon!</p>`;
+      if (!items.length) {
+        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--apple-gray);">Nothing to show yet — check back soon!</p>`;
         return;
       }
 
-      grid.innerHTML = videos.map(v => {
-        const id = extractYouTubeId(v.YouTubeURL);
+      grid.innerHTML = items.map(v => {
+        const videoId = extractYouTubeId(v.YouTubeURL);
+        const media = videoId
+          ? `<div class="showcase-media showcase-clickable-media" tabindex="0" role="button" aria-label="Play video: ${escapeHtml(v.Title)}" onclick="openVideoModal('${videoId}')" onkeydown="if(event.key==='Enter')openVideoModal('${videoId}')">
+               <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="${escapeHtml(v.Title)}" loading="lazy">
+               <div class="showcase-hover-icon"><i class="fas fa-play"></i></div>
+             </div>`
+          : `<div class="showcase-media showcase-clickable-media" tabindex="0" role="button" aria-label="View image: ${escapeHtml(v.Title)}" onclick="openShowcaseImage('${v.ImageURL}', '${escapeHtml(v.Title).replace(/'/g, "\\'")}')" onkeydown="if(event.key==='Enter')openShowcaseImage('${v.ImageURL}', '${escapeHtml(v.Title).replace(/'/g, "\\'")}')">
+               <img src="${v.ImageURL}" alt="${escapeHtml(v.Title)}" loading="lazy">
+               <div class="showcase-hover-icon"><i class="fas fa-expand"></i></div>
+             </div>`;
         return `
         <div class="showcase-card">
-          <div class="showcase-media showcase-video-thumb" tabindex="0" role="button" aria-label="Play video: ${escapeHtml(v.Title)}" onclick="openVideoModal('${id}')" onkeydown="if(event.key==='Enter')openVideoModal('${id}')">
-            <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="${escapeHtml(v.Title)}" loading="lazy">
-            <div class="showcase-play-btn"><i class="fas fa-play"></i></div>
-          </div>
+          ${media}
           <div class="showcase-body">
             ${v.Category ? `<div class="showcase-meta">${escapeHtml(v.Category)}</div>` : ''}
             <div class="showcase-title">${escapeHtml(v.Title)}</div>
@@ -565,6 +573,21 @@ function closeVideoModal() {
   modal.classList.remove('active');
   frame.src = '';
   document.body.classList.remove('modal-open');
+}
+
+function openShowcaseImage(src, alt) {
+  const popup = document.getElementById('showcase-popup');
+  const img = document.getElementById('showcase-popup-img');
+  if (!popup || !img || !src) return;
+  img.src = src;
+  img.alt = alt || 'Showcase image';
+  popup.classList.add('active');
+}
+
+function closeShowcaseImage() {
+  const popup = document.getElementById('showcase-popup');
+  if (!popup) return;
+  popup.classList.remove('active');
 }
 
 /* =====================================================
@@ -889,8 +912,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const videoModal = document.getElementById('video-modal');
   videoModal?.addEventListener('click', function(e) { if (e.target === this) closeVideoModal(); });
+
+  const showcasePopup = document.getElementById('showcase-popup');
+  showcasePopup?.addEventListener('click', function() { closeShowcaseImage(); });
+
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && videoModal?.classList.contains('active')) closeVideoModal();
+    if (e.key !== 'Escape') return;
+    if (videoModal?.classList.contains('active')) closeVideoModal();
+    if (showcasePopup?.classList.contains('active')) closeShowcaseImage();
   });
 
   const yearEl = document.getElementById('currentYear');

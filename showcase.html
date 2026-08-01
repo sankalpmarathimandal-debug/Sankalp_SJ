@@ -39,9 +39,9 @@
   <p>Celebrating the talent, artistry, and achievements of our community.</p>
 </section>
 
-<!-- Videos are added via data/showcase.xlsx — no coding needed, see README -->
+<!-- Videos & photos are added via data/showcase.xlsx — no coding needed, see README -->
 <div class="placeholder-notice">
-  <i class="fas fa-video"></i> Video showcase — add a row to <strong>data/showcase.xlsx</strong> with any YouTube link to publish a video here, ordered by priority.
+  <i class="fas fa-star"></i> Add a row to <strong>data/showcase.xlsx</strong> with a YouTube link or a photo to publish it here, ordered by priority.
 </div>
 
 <section>
@@ -57,6 +57,11 @@
       <iframe id="video-modal-frame" src="" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
+</div>
+
+<!-- Image Lightbox -->
+<div class="popup" id="showcase-popup" onclick="closeShowcaseImage()">
+  <img id="showcase-popup-img" alt="Showcase image">
 </div>
 
 <footer>

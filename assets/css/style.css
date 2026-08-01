@@ -1060,10 +1060,10 @@ main { flex: 1; }
 .showcase-meta  { font-size: 13px; color: var(--accent-orange); font-weight: 600; margin-bottom: 10px; }
 .showcase-desc  { font-size: 14px; color: var(--apple-gray); line-height: 1.6; }
 
-.showcase-video-thumb { position: relative; cursor: pointer; }
-.showcase-video-thumb:focus-visible { outline: 3px solid var(--accent-purple); outline-offset: -3px; }
+.showcase-clickable-media { position: relative; cursor: pointer; }
+.showcase-clickable-media:focus-visible { outline: 3px solid var(--accent-purple); outline-offset: -3px; }
 
-.showcase-play-btn {
+.showcase-hover-icon {
   position: absolute;
   inset: 0;
   display: flex;
@@ -1071,7 +1071,7 @@ main { flex: 1; }
   justify-content: center;
 }
 
-.showcase-play-btn i {
+.showcase-hover-icon i {
   width: 64px; height: 64px;
   border-radius: 50%;
   background: rgba(0,0,0,0.55);
@@ -1080,12 +1080,13 @@ main { flex: 1; }
   align-items: center;
   justify-content: center;
   font-size: 22px;
-  padding-left: 4px;
   transition: all 0.25s ease;
 }
 
-.showcase-video-thumb:hover .showcase-play-btn i,
-.showcase-video-thumb:focus-visible .showcase-play-btn i {
+.showcase-hover-icon .fa-play { padding-left: 4px; }
+
+.showcase-clickable-media:hover .showcase-hover-icon i,
+.showcase-clickable-media:focus-visible .showcase-hover-icon i {
   background: var(--brand-gradient-start);
   transform: scale(1.1);
 }
