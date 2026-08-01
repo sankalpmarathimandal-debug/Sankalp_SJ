@@ -84,15 +84,32 @@ main { flex: 1; }
 }
 
 .nav-brand {
-  font-family: var(--font-devanagari);
-  font-size: 20px;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-brand-logo {
+  height: 34px;
+  width: 34px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.nav-brand-text {
+  font-family: var(--font-devanagari);
+  font-size: 18px;
+  font-weight: 700;
   background: linear-gradient(135deg, var(--brand-gradient-start), var(--brand-gradient-end));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  white-space: nowrap;
+}
+
+@media (max-width: 1150px) and (min-width: 901px) {
+  .nav-brand-sub { display: none; }
 }
 
 .nav-links {
