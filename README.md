@@ -85,6 +85,8 @@ The calendar is loaded from the 2026-2027 detailed schedule (weekly online class
 
 **Known thing to double-check:** the source schedule's detail sheet lists Diwali on **November 8, 2026**, but its own Summary tab lists **November 15, 2026** — the calendar currently uses November 8. Confirm which date is correct and let me know if it needs correcting.
 
+`calendar.html` also has a **"Download Full Year Schedule (Excel)"** button right under the page title, linking directly to `data/shala-calendar.xlsx` — so parents can grab the whole year at once. Since it points at the live workbook, it's always in sync automatically; no separate export file to maintain.
+
 ### Setting up form delivery (Join Us / Become a Sponsor)
 
 No Google Forms — `join.html` and `sponsor.html` are real HTML forms that submit via [Web3Forms](https://web3forms.com), a free email-relay service with no account or password required:
