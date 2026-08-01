@@ -13,7 +13,7 @@ Sankalp_SJ/
 ├── events.html         Event timeline (by year)
 ├── team.html           Our Team
 ├── shala.html          Marathi Shala
-├── calendar.html       Shala Calendar (monthly, placeholder data)
+├── calendar.html       Shala Calendar (monthly, real 2026-2027 schedule)
 ├── join.html           Join Us form (Web3Forms — no Google Forms)
 ├── sponsor.html        Become a Sponsor form (Web3Forms — no Google Forms)
 ├── faq.html            FAQs
@@ -78,10 +78,12 @@ Keep the header row of each workbook intact, and keep images web-friendly (≤12
 
 - **Month** is the full name (`September`), **Day** is the day of the month (`7`).
 - **Type** controls the color and must be one of: `Class`, `Event`, `Holiday`, `Exam`.
-- **Time** and **Notes** are optional.
-- For a weekly recurring class, add one row per week (e.g. every Monday) — there's no recurrence feature yet.
+- **Time** and **Notes** are optional. Notes is a good place for context like "Online · Week 5" or "In-person".
+- For a weekly recurring class, add one row per week — there's no recurrence feature yet.
 
-The calendar currently ships with **sample dates** so the page isn't empty — replace them with the real schedule whenever it's ready. The page opens on the current month if it has entries, otherwise the nearest month that does.
+The calendar is loaded from the 2026-2027 detailed schedule (weekly online classes, holidays, exams, and in-person events like Diwali/Gudhi Padwa/Picnic). Multi-day breaks (Christmas/New Year, Winter Break, Spring Break) are expanded into one row per day so every day in the break shows correctly. The page opens on the current month if it has entries, otherwise the nearest month that does.
+
+**Known thing to double-check:** the source schedule's detail sheet lists Diwali on **November 8, 2026**, but its own Summary tab lists **November 15, 2026** — the calendar currently uses November 8. Confirm which date is correct and let me know if it needs correcting.
 
 ### Setting up form delivery (Join Us / Become a Sponsor)
 
@@ -147,6 +149,6 @@ Double-click **Start Local Preview.command** — it opens the site in your brows
 ## Still to do
 
 - Shala admission form link (currently a mailto) in `shala.html`
-- Real schedule in `data/shala-calendar.xlsx` (currently sample/demo dates)
+- Confirm the Diwali date discrepancy noted above (Nov 8 vs Nov 15, 2026) and correct `data/shala-calendar.xlsx` if needed
 - `data/forms.xlsx` ships with one inactive example row — replace or delete once real forms are added
 - `data/showcase.xlsx` ships with two inactive example rows demonstrating Event grouping and a document card (`DocumentURL`/`ImageURL` point at placeholder files that don't exist yet) — replace or delete once real content is added
