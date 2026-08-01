@@ -20,6 +20,9 @@
      data/forms.xlsx          → Forms & Sign-ups page (Title, Description, Link, Active, Order)
                                  — add a row to publish any Google Forms / Tally
                                  link on the site with zero coding. See README.
+     data/showcase.xlsx       → Showcase page videos (Title, Description, Category,
+                                 YouTubeURL, Active, Order) — add a row with any
+                                 YouTube link to publish it, ordered by priority.
 
    Images live in assets/images/. Add new images there
    and reference them by relative path in the workbooks.
@@ -42,6 +45,7 @@ const CONFIG = {
   SHALA_FAQS_CSV: 'data/shala-faq.xlsx',
   SHALA_CALENDAR_CSV: 'data/shala-calendar.xlsx',
   FORMS_CSV: 'data/forms.xlsx',
+  SHOWCASE_CSV: 'data/showcase.xlsx',
 
   SLIDER_INTERVAL: 4000,
 
@@ -51,14 +55,6 @@ const CONFIG = {
   // enter your email, no account/password needed, a key arrives by email
   // instantly. Paste it below and both forms start working.
   WEB3FORMS_ACCESS_KEY: 'b5ba71b4-5c39-405f-9c67-1383a073f01f',
-
-  // SHOWCASE ITEMS — PLACEHOLDER: replace with real performances/art/achievements.
-  SHOWCASE_ITEMS: [
-    { title: 'Community Performance', category: 'Dance',   image: '', desc: 'Placeholder — describe the performance or achievement.' },
-    { title: 'Talent Showcase',       category: 'Music',   image: '', desc: 'Placeholder — describe the performance or achievement.' },
-    { title: 'Art & Craft',           category: 'Art',     image: '', desc: 'Placeholder — describe the artwork or exhibit.' },
-    { title: 'Shala Students',        category: 'Marathi Shala', image: '', desc: 'Placeholder — highlight student accomplishments.' }
-  ]
 };
 
 /* =====================================================
@@ -515,20 +511,60 @@ function renderForms() {
 /* =====================================================
    SHOWCASE (showcase.html)
    ===================================================== */
+function extractYouTubeId(url) {
+  if (!url) return null;
+  const m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
 function renderShowcase() {
   const grid = document.getElementById('showcase-grid');
   if (!grid) return;
-  grid.innerHTML = CONFIG.SHOWCASE_ITEMS.map(item => `
-    <div class="showcase-card">
-      <div class="showcase-media">
-        ${item.image ? `<img src="${item.image}" alt="${escapeHtml(item.title)}" loading="lazy">` : '<i class="fas fa-image"></i>'}
-      </div>
-      <div class="showcase-body">
-        <div class="showcase-meta">${escapeHtml(item.category)}</div>
-        <div class="showcase-title">${escapeHtml(item.title)}</div>
-        <p class="showcase-desc">${escapeHtml(item.desc)}</p>
-      </div>
-    </div>`).join('');
+  loadSheet(CONFIG.SHOWCASE_CSV, rows => {
+      const videos = rows
+        .filter(v => v.Title && v.Title.trim() && extractYouTubeId(v.YouTubeURL))
+        .filter(v => !v.Active || v.Active.toLowerCase() !== 'no')
+        .sort((a, b) => parseInt(a.Order || 0) - parseInt(b.Order || 0));
+
+      if (!videos.length) {
+        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--apple-gray);">No videos to show yet — check back soon!</p>`;
+        return;
+      }
+
+      grid.innerHTML = videos.map(v => {
+        const id = extractYouTubeId(v.YouTubeURL);
+        return `
+        <div class="showcase-card">
+          <div class="showcase-media showcase-video-thumb" tabindex="0" role="button" aria-label="Play video: ${escapeHtml(v.Title)}" onclick="openVideoModal('${id}')" onkeydown="if(event.key==='Enter')openVideoModal('${id}')">
+            <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="${escapeHtml(v.Title)}" loading="lazy">
+            <div class="showcase-play-btn"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="showcase-body">
+            ${v.Category ? `<div class="showcase-meta">${escapeHtml(v.Category)}</div>` : ''}
+            <div class="showcase-title">${escapeHtml(v.Title)}</div>
+            ${v.Description ? `<p class="showcase-desc">${escapeHtml(v.Description)}</p>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+  });
+}
+
+function openVideoModal(videoId) {
+  const modal = document.getElementById('video-modal');
+  const frame = document.getElementById('video-modal-frame');
+  if (!modal || !frame || !videoId) return;
+  frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+  modal.classList.add('active');
+  document.body.classList.add('modal-open');
+}
+
+function closeVideoModal() {
+  const modal = document.getElementById('video-modal');
+  const frame = document.getElementById('video-modal-frame');
+  if (!modal || !frame) return;
+  modal.classList.remove('active');
+  frame.src = '';
+  document.body.classList.remove('modal-open');
 }
 
 /* =====================================================
@@ -850,6 +886,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const modal = document.getElementById('modal');
   modal?.addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+  const videoModal = document.getElementById('video-modal');
+  videoModal?.addEventListener('click', function(e) { if (e.target === this) closeVideoModal(); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && videoModal?.classList.contains('active')) closeVideoModal();
+  });
 
   const yearEl = document.getElementById('currentYear');
   if (yearEl) yearEl.textContent = new Date().getFullYear();

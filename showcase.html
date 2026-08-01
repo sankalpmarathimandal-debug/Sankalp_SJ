@@ -9,6 +9,7 @@
 <meta property="og:title" content="Showcase | Sankalp Marathi Mandal">
 <meta property="og:description" content="Talent and achievements from our Marathi community.">
 <meta property="og:type" content="website">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="assets/css/style.css?v=cb77f93">
 </head>
@@ -38,15 +39,25 @@
   <p>Celebrating the talent, artistry, and achievements of our community.</p>
 </section>
 
-<!-- PLACEHOLDER: edit SHOWCASE_ITEMS in assets/js/main.js with real items and images -->
+<!-- Videos are added via data/showcase.xlsx — no coding needed, see README -->
 <div class="placeholder-notice">
-  <i class="fas fa-pen"></i> Placeholder content — update the <strong>SHOWCASE_ITEMS</strong> list in <code>assets/js/main.js</code> with real performances, art, and photos.
+  <i class="fas fa-video"></i> Video showcase — add a row to <strong>data/showcase.xlsx</strong> with any YouTube link to publish a video here, ordered by priority.
 </div>
 
 <section>
   <div class="showcase-grid" id="showcase-grid"></div>
 </section>
 </main>
+
+<!-- Video Modal -->
+<div class="modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Video player">
+  <div class="modal-content video-modal-content">
+    <button class="modal-close" onclick="closeVideoModal()" aria-label="Close video">×</button>
+    <div class="video-embed-wrap">
+      <iframe id="video-modal-frame" src="" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="footer-inner">

@@ -17,7 +17,7 @@ Sankalp_SJ/
 ├── join.html           Join Us form (Web3Forms — no Google Forms)
 ├── sponsor.html        Become a Sponsor form (Web3Forms — no Google Forms)
 ├── faq.html            FAQs
-├── showcase.html       Showcase (placeholder — needs content)
+├── showcase.html       Showcase — video gallery (Excel-driven, see below)
 ├── forms.html           Forms & Sign-ups (self-service — see below)
 ├── constitution.html   Constitution (embedded PDF)
 │
@@ -32,7 +32,8 @@ Sankalp_SJ/
 │   ├── faq.xlsx            FAQ page questions
 │   ├── shala-faq.xlsx      Shala page FAQs
 │   ├── shala-calendar.xlsx Shala Calendar page (Year, Month, Day, Title, Type, Time, Notes)
-│   └── forms.xlsx          Forms & Sign-ups page (Title, Description, Link, Active, Order)
+│   ├── forms.xlsx          Forms & Sign-ups page (Title, Description, Link, Active, Order)
+│   └── showcase.xlsx       Showcase videos (Title, Description, Category, YouTubeURL, Active, Order)
 │
 ├── assets/
 │   ├── css/style.css       All styling
@@ -64,6 +65,7 @@ Sankalp_SJ/
 | Constitution | replace `docs/constitution.pdf` |
 | Join Us / Become a Sponsor forms | `join.html` / `sponsor.html` — see "Setting up form delivery" below |
 | Forms & Sign-ups (event RSVPs, surveys, etc.) | `data/forms.xlsx` — no coding, see "Updating Forms & Sign-ups" below |
+| Showcase videos | `data/showcase.xlsx` — no coding, see "Updating the Showcase" below |
 | Announcement banner | marquee text in `index.html` |
 
 Keep the header row of each workbook intact, and keep images web-friendly (≤1200px, JPG preferred).
@@ -104,6 +106,19 @@ Until a real key is set, submitting either form shows a friendly "not set up yet
 
 To take a form down, set its `Active` column to `No` instead of deleting the row (keeps the link on file for next time). If there are no active rows, the page just shows "No forms are open right now."
 
+### Updating the Showcase (video gallery, no coding required)
+
+`showcase.html` displays a grid of YouTube videos driven entirely by `data/showcase.xlsx` — no image uploads, no code. Columns: `Title, Description, Category, YouTubeURL, Active, Order`.
+
+**To add a video:**
+
+1. Paste any YouTube link into `YouTubeURL` — a normal `youtube.com/watch?v=...` link, a `youtu.be/...` short link, or a Shorts link all work.
+2. Fill in `Title` (required), and optionally `Description` and `Category` (e.g. "Dance", "Music", "Marathi Shala").
+3. Set `Active` to `Yes` and give it an `Order` number — **lower numbers show first**, so this is how priority is controlled. Use gaps (10, 20, 30…) to make it easy to slot new videos in between later.
+4. Save and get the file back into the repo the same way as `forms.xlsx` (hand it to the repo admin, or upload directly via GitHub's website if you're a collaborator — see "Updating Forms & Sign-ups" above for the exact steps).
+
+The site automatically pulls each video's thumbnail from YouTube — nothing to upload. Clicking a thumbnail plays the video in a pop-up right on the page. Set `Active` to `No` to unpublish a video without losing the row. If there are no active rows, the page shows "No videos to show yet."
+
 ## Previewing changes
 
 Double-click **Start Local Preview.command** — it opens the site in your browser with data loading correctly. (Opening an .html file directly won't load data; browsers block that.)
@@ -116,7 +131,6 @@ Double-click **Start Local Preview.command** — it opens the site in your brows
 
 ## Still to do
 
-- Showcase page content (`SHOWCASE_ITEMS` in `assets/js/main.js`)
 - Shala admission form link (currently a mailto) in `shala.html`
 - Real schedule in `data/shala-calendar.xlsx` (currently sample/demo dates)
-- `data/forms.xlsx` ships with one inactive example row — replace or delete it once real forms are added
+- `data/forms.xlsx` and `data/showcase.xlsx` each ship with one inactive example row — replace or delete once real forms/videos are added
