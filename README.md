@@ -59,6 +59,7 @@ Sankalp_SJ/
 | Event timeline | `data/timeline.xlsx` |
 | Testimonials | `data/testimonials.xlsx` |
 | Highlight photos | just add/remove photos in `assets/images/highlights/` and push — updates automatically |
+| Community Pride Wall (homepage) | just add/remove image files in `assets/images/branding/logo-variants/` and push — updates automatically, see "Updating the Community Pride Wall" below |
 | Partner logos | `data/partners.xlsx` + logo in `assets/images/partners/` |
 | Team members | `data/team.xlsx` + photo in `assets/images/team/` |
 | Shala team / FAQs | `data/shala-team.xlsx` / `data/shala-faq.xlsx` |
@@ -86,6 +87,16 @@ The calendar is loaded from the 2026-2027 detailed schedule (weekly online class
 **Known thing to double-check:** the source schedule's detail sheet lists Diwali on **November 8, 2026**, but its own Summary tab lists **November 15, 2026** — the calendar currently uses November 8. Confirm which date is correct and let me know if it needs correcting.
 
 `calendar.html` also has a **"Download Full Year Schedule (Excel)"** button right under the page title, linking directly to `data/shala-calendar.xlsx` — so parents can grab the whole year at once. Since it points at the live workbook, it's always in sync automatically; no separate export file to maintain.
+
+### Updating the Community Pride Wall (homepage, no coding required)
+
+The homepage shows a "Community Pride Wall" section (right before About Us) — two rows of community-made logo art flowing across the screen in opposite directions. It's fully automatic: the site reads whatever image files are sitting in `assets/images/branding/logo-variants/`, no spreadsheet or code edit involved.
+
+**To add a new one:** drop the image file into `assets/images/branding/logo-variants/` (any filename works — no renaming needed) and push, or upload it via GitHub's website (**Add file → Upload files** on that folder, **Commit changes**). A GitHub Action (`.github/workflows/update-logo-variants.yml`) automatically regenerates `data/logo-variants.json` within about a minute of the push, and the homepage picks it up on the next page load — nothing else to touch.
+
+**To remove one:** delete the image file from that folder the same way; the manifest updates automatically.
+
+Naming convention for the current set: `variant-01.png` through `variant-19.png`, standardized from the original `Sankalp_Logo` folder. New uploads don't need to follow this pattern — any image filename is picked up automatically — but keeping the `variant-NN` style is a nice-to-have for tidiness if you're adding several at once.
 
 ### Setting up form delivery (Join Us / Become a Sponsor)
 

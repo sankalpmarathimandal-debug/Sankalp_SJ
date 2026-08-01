@@ -11,6 +11,10 @@
      data/testimonials.xlsx  → homepage Community Voices
      data/highlights.json    → homepage slider (AUTO — just
                                add photos to assets/images/highlights/)
+     data/logo-variants.json → homepage Community Pride Wall (AUTO — just
+                               add image files to
+                               assets/images/branding/logo-variants/, any
+                               filename works, no coding needed)
      data/partners.xlsx        → homepage partner logos
      data/team.xlsx             → Our Team page
      data/shala-team.xlsx        → Marathi Shala team section
@@ -44,6 +48,7 @@ const CONFIG = {
   TIMELINE_CSV: 'data/timeline.xlsx',
   TESTIMONIALS_CSV: 'data/testimonials.xlsx',
   HIGHLIGHTS_JSON: 'data/highlights.json',
+  LOGO_VARIANTS_JSON: 'data/logo-variants.json',
   PARTNERS_CSV: 'data/partners.xlsx',
   TEAM_CSV: 'data/team.xlsx',
   SHALA_TEAM_CSV: 'data/shala-team.xlsx',
@@ -403,6 +408,38 @@ function loadImpactSlider() {
       startAutoSlide();
     })
     .catch(err => console.error('Failed to load highlights', err));
+}
+
+/* =====================================================
+   COMMUNITY PRIDE WALL (homepage)
+   Auto-loads from data/logo-variants.json, which GitHub
+   Actions regenerates whenever a file is added to or removed
+   from assets/images/branding/logo-variants/. No coding
+   needed — just drop an image in that folder and push (or
+   upload it via GitHub's web UI) and it flows in automatically.
+   ===================================================== */
+function renderLogoPride() {
+  const row1 = document.getElementById('pride-row-1');
+  const row2 = document.getElementById('pride-row-2');
+  if (!row1 || !row2) return;
+  if (location.protocol === 'file:') return;
+  fetch(CONFIG.LOGO_VARIANTS_JSON)
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(items => {
+      const srcs = items.map(i => i.src).filter(Boolean);
+      if (!srcs.length) return;
+      const mid = Math.ceil(srcs.length / 2);
+      fillPrideRow(row1, srcs.slice(0, mid));
+      fillPrideRow(row2, srcs.length > mid ? srcs.slice(mid) : srcs.slice(0, mid));
+    })
+    .catch(err => console.error('Failed to load logo variants', err));
+}
+
+function fillPrideRow(el, srcs) {
+  const doubled = [...srcs, ...srcs]; // duplicate so the marquee loops seamlessly
+  el.innerHTML = doubled.map(src =>
+    `<div class="pride-chip"><img src="${escapeHtml(src)}" alt="Community logo artwork" loading="lazy"></div>`
+  ).join('');
 }
 
 function buildSlider() {
@@ -923,6 +960,7 @@ document.addEventListener('DOMContentLoaded', function() {
   loadTestimonials();
   loadImpactSlider();
   renderPartnerLogos();
+  renderLogoPride();
   loadTimeline();
   renderTeamGrid(CONFIG.TEAM_CSV, 'team-container');
   renderTeamGrid(CONFIG.SHALA_TEAM_CSV, 'shala-team-container');
