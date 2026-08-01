@@ -270,6 +270,32 @@ main { flex: 1; }
 
 .hero-image-container img:hover { transform: scale(1.02); }
 
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-image-container img,
+.hero-headline,
+.hero-subheadline,
+.hero-cta-buttons {
+  animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-image-container img { animation-delay: 0s; }
+.hero-headline            { animation-delay: 0.15s; }
+.hero-subheadline         { animation-delay: 0.3s; }
+.hero-cta-buttons         { animation-delay: 0.45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-image-container img,
+  .hero-headline,
+  .hero-subheadline,
+  .hero-cta-buttons {
+    animation: none;
+  }
+}
+
 .hero-text-section {
   padding: 48px 20px;
   text-align: center;
